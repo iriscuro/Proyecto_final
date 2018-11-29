@@ -1,22 +1,18 @@
 
+#include "Juego.h"
 #include "Menu.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <sstream>
-#define ANCHO    1500
-#define ALTO      840
+#define ANCHO    1200
+#define ALTO      630
 #define TITULO    "Hit the Ball"
 
 Menu::Menu()
 {
    inicio = inicializa();
 }
-/*
-void Menu::mostrarL()
-{
-    ventana1.draw(opcion);
-}
-*/
+
 bool Menu::inicializa()
 {
    // Se cargan los archivos necesarios.
@@ -52,44 +48,40 @@ bool Menu::inicializa()
 
     // Inicializar el opcion
    opcion[0].setString("PLAY");
-   opcion[0].setCharacterSize(53);
-   opcion[0].setPosition(630, 230);
-   opcion[0].setColor(sf::Color(90, 100, 20));
+   opcion[0].setCharacterSize(40);
+   opcion[0].setPosition(520, 190);
+   opcion[0].setColor(sf::Color(255, 180, 255));
 
    opcion[1].setString("ESCORES");
-   opcion[1].setCharacterSize(53);
-   opcion[1].setPosition(558, 370);
-   opcion[1].setColor(sf::Color(90, 100, 20));
+   opcion[1].setCharacterSize(40);
+   opcion[1].setPosition(463, 305);
+   opcion[1].setColor(sf::Color(100, 0, 50));
 
    opcion[2].setString("MINIJUEGO");
-   opcion[2].setCharacterSize(53);
-   opcion[2].setPosition(540, 515);
-   opcion[2].setColor(sf::Color(90, 100, 20));
+   opcion[2].setCharacterSize(40);
+   opcion[2].setPosition(450, 423);
+   opcion[2].setColor(sf::Color(100, 0, 50));
 
    opcion[3].setString("CREDITOS");
    opcion[3].setCharacterSize(60);
-   opcion[3].setPosition(86, 630);
-   opcion[3].setColor(sf::Color(0, 100, 20));
+   opcion[3].setPosition(70, 500);
+   opcion[3].setColor(sf::Color(100, 0, 50));
 
    opcion[4].setString("SALIR");
    opcion[4].setCharacterSize(60);
-   opcion[4].setPosition(1190, 630);
-   opcion[4].setColor(sf::Color(0, 100, 20));
+   opcion[4].setPosition(950, 500);
+   opcion[4].setColor(sf::Color(100, 0, 50));
 
    selectedItemIndex = 0;
 
    return true;
 }
 
-void Menu::actualTexto( sf::Text opcionElegida )
-{
-    opcionElegida.setColor(sf::Color(90, 0, 20));
-    ventana1.draw(opcionElegida);
-}
+
 void Menu::dibujarSprites()
 {
     ventana1.draw(fondo1);
-    for(int i=0; i<MAX_NUMBER_OF_ITEMS ;i++){
+    for(int i=0; i< MAX_NUMBER_OF_ITEMS ;i++){
         ventana1.draw(opcion[i]);
     }
 
@@ -99,9 +91,9 @@ void Menu::MoveUp()
 {
 	if (selectedItemIndex - 1 >= 0)
 	{
-		menu[selectedItemIndex].setColor(sf::Color::White);
+		opcion[selectedItemIndex].setColor(sf::Color(100, 0, 50));
 		selectedItemIndex--;
-		menu[selectedItemIndex].setColor(sf::Color::Red);
+        opcion[selectedItemIndex].setColor(sf::Color(255, 180, 255));
 	}
 }
 
@@ -109,9 +101,9 @@ void Menu::MoveDown()
 {
 	if (selectedItemIndex + 1 < MAX_NUMBER_OF_ITEMS)
 	{
-		menu[selectedItemIndex].setColor(sf::Color::White);
+		opcion[selectedItemIndex].setColor(sf::Color(100, 0, 50));
 		selectedItemIndex++;
-		menu[selectedItemIndex].setColor(sf::Color::Red);
+		opcion[selectedItemIndex].setColor(sf::Color(255, 180, 255));
 	}
 }
 
@@ -129,23 +121,56 @@ void Menu::accion()
       // Procesar los eventos de SFML
       sf::Event event;
       while (ventana1.pollEvent(event))
-      {
-         // Evento: El usuario hace clic en el botón de cerrar [X]
-         if (event.type == sf::Event::Closed)
-         {
-            ventana1.close();
-         }
+		{
+			switch (event.type)
+			{
+			case sf::Event::KeyReleased:
+				switch (event.key.code)
+				{
+				case sf::Keyboard::Up:
+					MoveUp();
+					break;
 
-         // Obtener las coordenadas del mouse
-            int mouseX = sf::Mouse::getPosition(ventana1).x;
-            int mouseY = sf::Mouse::getPosition(ventana1).y;
+				case sf::Keyboard::Down:
+					MoveDown();
+					break;
 
-            int opcionX =620  ;
-            int opcionY = 250;
+				case sf::Keyboard::Return:
+					switch (GetPressedItem())
+					{
+					case 0:
+						std::cout << "Play apretaste el boton" << std::endl;
+						ventana1.close();
+                        juego.correr();
+						break;
+					case 1:
+						std::cout << "Scores apretaste el boton" << std::endl;
+						break;
+                    case 2:
+						std::cout << "Minijuego apretaste el boton" << std::endl;
+						break;
+                    case 3:
+						std::cout << "Creditos apretaste el boton" << std::endl;
+						break;
 
+					case 4:
+						ventana1.close();
+						break;
+					}
 
-        }
+					break;
+				}
 
+				break;
+			case sf::Event::Closed:
+				ventana1.close();
+
+				break;
+
+			}
+		}
+
+      ventana1.clear();
 
       // Mostrar todo
       dibujarSprites();

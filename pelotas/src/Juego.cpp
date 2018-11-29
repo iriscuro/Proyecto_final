@@ -1,12 +1,12 @@
-/*
+
 #include <iostream>
 #include <sstream>
 
 #include "Juego.h"
 
-#define ANCHO     1500
-#define ALTO      850
-#define TITULO    "Hit the Ball"
+#define ANCHO     1200
+#define ALTO      630
+#define TITULO    "JUEGO"
 
 
 Juego::Juego()
@@ -17,12 +17,12 @@ Juego::Juego()
 bool Juego::inicializar()
 {
    // Se cargan los archivos necesarios.
-   if (!fuente.loadFromFile("fuente.ttf"))
+   if (!fuente.loadFromFile("Fuentes/fuente.ttf"))
    {
       return false;
    }
 
-   if (!tx_pelota.loadFromFile("pelota.png"))
+   if (!tx_pelota.loadFromFile("imagenes/pelota.png"))
    {
       return false;
    }
@@ -43,8 +43,11 @@ bool Juego::inicializar()
 
    // Fijar fuente para los textos
    texto_score.setFont(fuente);
+   texto_score.setCharacterSize(40);
    texto_tiempo.setFont(fuente);
+   texto_tiempo.setCharacterSize(40);
    texto_fin.setFont(fuente);
+   texto_fin.setCharacterSize(40);
 
    // Inicializar el score
    texto_score.setString("Score");
@@ -158,17 +161,27 @@ void Juego::correr()
             }
 
 
-            // Obtener las coordenadas de la segunda pelota
             pelotaX = pelota2.obtenerX();
             pelotaY = pelota2.obtenerY();
 
-            // ¿El mouse tocó la pelota2?
             if (mouseX > pelotaX - 40 && mouseX < pelotaX + 40
             && mouseY > pelotaY - 40 && mouseY < pelotaY + 40)
             {
                aumentarScore();
                actualizarTiempo();
                pelota2.reiniciar();
+            }
+
+            pelotaX = pelota3.obtenerX();
+            pelotaY = pelota3.obtenerY();
+
+
+            if (mouseX > pelotaX - 40 && mouseX < pelotaX + 40
+            && mouseY > pelotaY - 40 && mouseY < pelotaY + 40)
+            {
+               aumentarScore();
+               actualizarTiempo();
+               pelota3.reiniciar();
             }
          }
 
@@ -194,7 +207,7 @@ void Juego::correr()
             str << "Tu puntuacion final es: " << score;
 
             texto_fin.setString(str.str());
-            texto_fin.setPosition(640, 400);
+            texto_fin.setPosition(500, 250);
 
             finalizado = true;
          }
@@ -223,4 +236,5 @@ void Juego::correr()
    }
 }
 
-*/
+
+
